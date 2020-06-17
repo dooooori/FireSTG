@@ -9,16 +9,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     int pl_img;
     pl_img = LoadGraph( "./res/img/pl_test.png"); // 画像を格納
 
-    while (1) {
-        ProcessMessage();//特定の場所でループする場合定期的に呼ぶ必要がある
-        if (ProcessMessage() != 0) {//×ボタンは0以外を返す
-            break;
-        }
-        ClearDrawScreen();
-        DrawGraph(x, 100, pl_img, TRUE); // データハンドルを使って画像を描画
-        x += 2;
-        ScreenFlip(); //裏画面を表画面に反映 モニターのHz分待機
-    }
+    // while(裏画面を表画面に反映, メッセージ処理, 画面クリア)
+    while (ScreenFlip() == 0 && ProcessMessage() == 0 && ClearDrawScreen() == 0) {
+
+        DrawGraph(x, 100, pl_img, TRUE); //画像の描画
+        DrawGraph(x / 2, 200, pl_img, TRUE); //画像の描画
+        DrawGraph(x / 4, 300, pl_img, TRUE); //画像の描画
+        x = x + 2; // xを2増やす
+
+    }//while内の関数はエラーが起きると0以外を返す
     DxLib_End();    // DXライブラリ終了処理
     return 0;
 }
